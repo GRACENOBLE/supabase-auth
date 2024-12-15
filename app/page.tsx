@@ -1,18 +1,38 @@
-"use client"
-import Hero from "@/components/hero";
-import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
-import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
+"use client";
 import { Button } from "@/components/ui/button";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { createClient } from "@/utils/supabase/client";
+import { GetSupabaseUser } from "@/actions";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Index() {
-  const supabase = createClient()
+  const [user, setUser] = useState<any>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const setSupabaseUser = async () => {
+      const user = await GetSupabaseUser();
+      if (user != null) {
+        setUser(user);
+      }
+    };
+
+    setSupabaseUser();
+  }, [user]);
+  if (user != null) {
+    redirect("/protected");
+  }
+
   const handleClick = () => {
     supabase.auth.signInWithOAuth({
       provider: "google",
     });
+  };
+
+  if (user != null) {
+    redirect("/protected");
   }
+
   return (
     <>
       <Button onClick={handleClick}>Login with google</Button>
