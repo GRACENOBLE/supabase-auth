@@ -11,3 +11,5 @@ export const GetSupabaseUser = async () => {
 
   return user;
 };
+
+

@@ -1,14 +1,27 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
+
 import { GetSupabaseUser } from "@/actions";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Container from "@/components/container";
+import SignInButton from "@/components/sign-in-button";
 
 export default function Index() {
   const [user, setUser] = useState<any>(null);
-  const supabase = createClient();
+  const [count, setCount] = useState<number>(0);
+  const router = useRouter();
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((prevCount) => prevCount + 1); // Increment the counter every 2 seconds
+    }, 2000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
+  // Fetch and set the user
   useEffect(() => {
     const setSupabaseUser = async () => {
       const user = await GetSupabaseUser();
@@ -18,24 +31,25 @@ export default function Index() {
     };
 
     setSupabaseUser();
-  }, [user]);
-  if (user != null) {
-    redirect("/protected");
-  }
+  }, [count]);
 
-  const handleClick = () => {
-    supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-  };
+  // Redirect when user is set
+  useEffect(() => {
+    // console.log("check");
+    // console.log(user);
+
+    if (user != null) {
+      router.push("/protected");
+    }
+  }, [user, count]);
 
   if (user != null) {
     redirect("/protected");
   }
 
   return (
-    <>
-      <Button onClick={handleClick}>Login with google</Button>
-    </>
+    <Container>
+      <SignInButton />
+    </Container>
   );
 }
