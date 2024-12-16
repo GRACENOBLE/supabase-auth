@@ -20,8 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <Header/>
-        <div className="flex flex-col gap-20 max-w-5xl p-5">{children}</div>
+        <Header />
+        {children}
       </body>
     </html>
   );

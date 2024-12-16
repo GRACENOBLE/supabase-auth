@@ -1,15 +1,14 @@
 import { signInAction, signOutAction } from "@/app/actions";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ArrowRightFromLine, Info, Settings, UserRound } from "lucide-react";
-import { GetSupabaseUser} from "@/actions";
+import { GetSupabaseUser } from "@/actions";
 import SignInButton from "@/components/sign-in-button";
+import Image from "next/image";
 
-
-const UserButton = async() => {
-  
-  const user = await GetSupabaseUser()
+const UserButton = async () => {
+  const user = await GetSupabaseUser();
   console.log(user);
-  
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -25,8 +24,15 @@ const UserButton = async() => {
       >
         {user ? (
           <div className="py-1">
-            <div className="w-12 h-12 rounded-full bg-sbone mx-auto mt-4 mb-2"></div>
-            <p className="mx-auto w-fit mb-4">Grace Noble</p>
+            <Image
+              src={user.user_metadata.avatar_url}
+              alt={""}
+              width={300}
+              height={300}
+              className="rounded-full w-16 h-16 mx-auto my-4"
+            />
+
+            <p className="mx-auto w-fit mb-4">{user.user_metadata.full_name}</p>
             <MenuItem>
               <a
                 href="#"
@@ -59,7 +65,7 @@ const UserButton = async() => {
             </form>
           </div>
         ) : (
-          <SignInButton/>
+          <SignInButton />
         )}
       </MenuItems>
     </Menu>

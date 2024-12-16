@@ -14,8 +14,8 @@ export default function Index() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount((prevCount) => prevCount + 1); // Increment the counter every 2 seconds
-    }, 2000);
+      setCount((prevCount) => prevCount + 1); // Increment the counter every 1 second
+    }, 1000);
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(interval);
